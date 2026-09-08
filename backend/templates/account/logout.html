@@ -1,0 +1,7 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Wylogowanie{% endblock %}
+{% block content %}
+<h1>Wylogować Cię?</h1><p class="lede">Zakończysz sesję na tym urządzeniu.</p>
+<form method="post" action="{% url 'account_logout' %}">{% csrf_token %}{{ redirect_field }}<button class="button primary" type="submit">Wyloguj się</button></form>
+<p class="card-bottom"><a href="{% url 'account_home' %}">Zostań na koncie</a></p>
+{% endblock %}

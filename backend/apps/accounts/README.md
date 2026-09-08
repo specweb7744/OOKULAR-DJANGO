@@ -1,11 +1,15 @@
 # Konta i role
 
-Status: **fundament działa; zakres opisany w głównym README**.
+Status: **podblok rejestracji i logowania wdrożony w kodzie**.
 
-Tożsamość konta i role pracownik/pracodawca. Rejestracja, weryfikacja e-mail, odzyskiwanie dostępu i sesje mobilne są następnym etapem.
+Django-allauth 65.19.2: rejestracja obu ról, potwierdzenie i zmiana e-maila,
+logowanie, wylogowanie, reset i zmiana hasła. Konto, rola i adres e-mail zapisują
+się w jednej transakcji. Publiczny formularz nie przyjmuje uprawnień staff.
 
-Etap: 1. Zależności: `core`.
+HTML: `/konta/`; własne konto: `/konto/`; aplikacja natywna: `/api/auth/app/v1/`.
+HasVerifiedAccount chroni prywatne API, MobileSessionAuthentication sprawdza
+również hash sesji po zmianie hasła. Nie zastępuj tej klasy standardowym
+XSessionTokenAuthentication z allauth bez ponownego sprawdzenia unieważniania sesji.
 
-Szczegóły granic i kryteria ukończenia: [mapa modułów](../../../docs/01-bloki.md) i [etapy](../../../docs/04-etapy.md).
-
-Dodając funkcję, umieszczaj modele i logikę w tym module, a cienkie widoki HTTP w jego `views.py`. Publiczny endpoint wymaga jawnej decyzji o widoczności. Import modułu nie może wysyłać wiadomości, naliczać opłat ani uruchamiać AI.
+Testy: `tests.py`, `test_auth.py`, `test_client.py`.
+[Opis kont i uruchomienie](../../../docs/06-konta.md).

@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
+from apps.accounts.permissions import HasVerifiedAccount
+
 from .registry import MODULES
 
 
@@ -31,7 +33,7 @@ def api_root(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAdminUser, HasVerifiedAccount])
 def module_catalog(request):
     """Internal development map; planned modules expose no business endpoints."""
     return Response({"stage": "foundation", "modules": MODULES})

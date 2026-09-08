@@ -1,15 +1,14 @@
-# OOKULAR — klient webowy
+# OOKULAR — klient web
 
-Status: zaplanowana powierzchnia aplikacji; w tym etapie nie ma jeszcze interfejsu portalu.
+Działający podblok kont znajduje się w `backend/templates` i `backend/static/accounts`.
+Django renderuje formularze rejestracji, logowania, potwierdzania e-mail i odzyskiwania
+hasła. Formularze działają bez JS; JS dodaje pokazanie/ukrycie hasła. CSS ma układ
+na komputer i telefon. Nie ma zewnętrznych fontów, trackerów ani gotowych kont demo.
 
-Publiczne ekrany: strona główna z osią czasu i ogłoszeniami, artykuły branżowe, edukacja.
-Główne wejście do konta prowadzi pracownika. Mniejsze wejście „Dla pracodawców” prowadzi do informacji, cennika i panelu firmowego.
+Główne wejście do rejestracji prowadzi pracownika, mniejszy link — pracodawcę.
+Formularz pozwala jawnie zmienić rolę przed rejestracją. Logowanie jest wspólne.
+Po zalogowaniu użytkownik widzi wyłącznie własny adres i role, zmianę danych konta
+oraz wylogowanie. Całość kończy się na tym podbloku.
 
-Ekrany po zalogowaniu: kreator profilu, profil, ustawienia widoczności, oferty i dopasowania, wiadomości oraz powiadomienia.
-Panel pracodawcy: firma, rekruterzy, wymagania stanowiska, wyszukiwarka i lista dopasowań.
-
-API: `/api/v1/`; współdzielony klient w `packages/api-client`.
-W pierwszym wdrożeniu web najlepiej utrzymać API pod tym samym adresem domenowym.
-Tożsamość i reguły dopasowania należą do Django; nie powielamy ich w przeglądarce.
-
-Styl: [system interfejsu](../../docs/03-interfejs.md).
+[Uruchomienie i trasy](../../docs/06-konta.md).
+Oś czasu, kreator profilu, oferty i wiadomości pozostają kolejnymi etapami.

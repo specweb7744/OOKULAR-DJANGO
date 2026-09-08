@@ -1,16 +1,19 @@
 # OOKULAR — klient mobilny
 
-Status: kontrakt i miejsce na klienta; nie jest to jeszcze uruchamialna aplikacja ani APK/IPA.
+Działają wspólne konta i API logowania dla aplikacji natywnej. Responsywne ekrany
+webowe można używać w przeglądarce telefonu. Nie ma jeszcze ekranów React Native,
+instalowalnej aplikacji ani APK/IPA.
 
-Korzysta z tych samych kont, profili, treści i reguł dopasowania co web poprzez `/api/v1/`.
-Wspólny klient TypeScript jest w `packages/api-client`. Jego publiczne `status()` nie wymaga logowania.
-Mobilne uwierzytelnienie będzie wdrożone i sprawdzone w etapie kont; w szkielecie nie udajemy obsługi tokenów.
+`createMobileAuthClient` w `packages/api-client` obsługuje rejestrację, logowanie,
+potwierdzenie e-mail, ponowną wysyłkę, reset i zmianę hasła, sesję, własne konto
+oraz wylogowanie. Wstrzyknij magazyn tokenów z Keychain/Keystore, np. przez adapter
+przyszłego klienta; kod nie zapisuje ich w localStorage ani w jawnym pliku.
 
-Proponowany późniejszy klient: React Native / Expo, po zatwierdzeniu zakresu pierwszych ekranów.
-Nawigacja funkcjonalna: Start, Oferty, Wiadomości, Profil. Moduł powiadomień jest dostępny z górnego paska.
-Po wyborze roli pracodawcy: firma i wyszukiwanie kandydatów, z kontrolą członkostwa po stronie Django.
+HTTP 401 po rejestracji oznacza oczekiwanie na potwierdzenie. Zachowaj również token
+sesji oczekującej. Adresy z wiadomości otwierają formularze Django; po potwierdzeniu
+wróć do aplikacji i zaloguj się. Deep linki i ekran natywny są osobnym zadaniem.
+Weryfikację można też wykonać API, przekazując klucz z linku.
 
-Szkic profilu zapisuje się na serwerze; po zmianie urządzenia użytkownik wznawia ten sam etap.
-Na telefonie nie przechowujemy kluczy usług AI ani płatności.
-Nie wywołujemy lokalnego serwera telefonu pod `localhost`, gdy backend działa na komputerze:
-środowisko mobilne otrzyma jawnie ustawiony adres osiągalnego API.
+Adres backendu musi być osiągalny z telefonu; localhost telefonu wskazuje sam telefon.
+W produkcji stosuj HTTPS. Żadne klucze poczty ani usług zewnętrznych nie trafiają do aplikacji.
+[Kontrakt i scenariusze](../../docs/06-konta.md).

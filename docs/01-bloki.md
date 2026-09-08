@@ -1,4 +1,4 @@
-# OOKULAR — mapa bloków v0.1
+# OOKULAR — mapa bloków v0.2
 
 **Jeden backend Django, wspólna baza PostgreSQL, dwa interfejsy: web i mobile.**
 To modularny monolit: moduły mają oddzielne odpowiedzialności w jednym projekcie,
@@ -21,10 +21,10 @@ flowchart TD
 Schemat pokazuje współpracę bloków, nie kolejność wszystkich zapytań HTTP.
 Prywatność i uprawnienia kontrolują odczyt przed wyszukiwaniem i dopasowaniem.
 
-| Moduł w Django | Blok | Stan v0.1 | Odpowiedzialność |
+| Moduł w Django | Blok | Stan v0.2 | Odpowiedzialność |
 |---|---|---|---|
 | `core` | Fundament | Fundament | Konfiguracja, diagnostyka działania, wspólne API i katalog modułów. |
-| `accounts` | Konta i role | Fundament | Tożsamość konta i role pracownik/pracodawca. Rejestracja, weryfikacja e-mail, odzyskiwanie dostępu i sesje mobilne są następnym etapem. |
+| `accounts` | Konta i role | Wdrożony w kodzie | Rejestracja obu ról, potwierdzanie e-mail, logowanie, reset hasła, sesje web i mobilne. |
 | `taxonomy` | Słowniki i kryteria | Zaplanowany | Wersjonowane słowniki umiejętności, uprawnień i warunków pracy; oddzielenie informacji prywatnych od kryteriów zawodowych. |
 | `profiles` | Kreator profilu pracownika | Zaplanowany | Wieloetapowy kreator, szkic i wznawianie, tagi, suwaki, doświadczenie oddzielone od umiejętności, kontrolowana publikacja profilu. |
 | `organizations` | Firmy i członkostwa | Zaplanowany | Profil firmy, weryfikacja oraz członkostwa i uprawnienia rekruterów. Rola pracodawcy nie daje automatycznie dostępu do każdej firmy. |
@@ -64,7 +64,7 @@ obszarów rankingów kandydatów.
 
 „Szczęśliwa numeracja” identyfikatorów pozostaje wymaganiem kont. Ten techniczny szkielet
 używa BigAutoField i zwraca ID jako nieprzezroczysty tekst. Regułę docelowych numerów
-trzeba ustalić przed otwarciem rejestracji i utrwaleniem produkcyjnej bazy; w tym etapie
+trzeba ustalić przed publicznym uruchomieniem i utrwaleniem produkcyjnej bazy; w tym etapie
 nie ma produkcyjnych kont ani arbitralnego algorytmu numerologicznego.
 
 Zasady opinii zachowujemy w planie: brak modułu negatywnych ocen ludzi, ewentualne

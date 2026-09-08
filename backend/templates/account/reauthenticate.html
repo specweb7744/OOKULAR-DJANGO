@@ -1,0 +1,7 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Potwierdź hasłem{% endblock %}
+{% block content %}
+<span class="eyebrow">BEZPIECZEŃSTWO KONTA</span><h1>Potwierdź, że to Ty.</h1><p class="lede">Przed tą zmianą podaj hasło do swojego konta.</p>
+<form method="post" action="{% url 'account_reauthenticate' %}">{% csrf_token %}{{ redirect_field }}{% include "accounts/fields.html" %}<button type="submit" class="button primary">Potwierdź i kontynuuj</button></form>
+<p class="card-bottom"><a href="{% url 'account_home' %}">Wróć do konta</a></p>
+{% endblock %}

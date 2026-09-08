@@ -1,0 +1,12 @@
+Cześć!
+
+Ktoś użył tego adresu podczas rejestracji w OOKULAR. Konto z tym adresem już istnieje.
+Rejestracja nie zmieniła hasła ani roli istniejącego konta.
+
+Jeśli to Ty chcesz wrócić do konta, otwórz stronę logowania OOKULAR.
+W razie potrzeby wybierz „Nie pamiętasz hasła?”.
+Jeśli adres nie jest jeszcze potwierdzony, wybierz ponowną wysyłkę linku potwierdzającego.
+
+Jeśli to nie Ty próbujesz się zarejestrować, zignoruj tę wiadomość.
+
+Zespół OOKULAR

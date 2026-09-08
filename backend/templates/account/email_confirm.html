@@ -1,0 +1,13 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Potwierdź adres e-mail{% endblock %}
+{% block content %}
+{% if confirmation and can_confirm %}
+<span class="eyebrow">TWOJA SKRZYNKA, TWOJE KONTO</span><h1>Potwierdź adres e-mail.</h1>
+<p class="lede">Potwierdzasz adres <strong class="break-word">{{ confirmation.email_address.email }}</strong> w OOKULAR.</p>
+<form method="post" action="{% url 'account_confirm_email' confirmation.key %}">{% csrf_token %}{{ redirect_field }}<button type="submit" class="button primary">Potwierdzam adres e-mail</button></form>
+{% else %}
+<h1>Ten link już nie działa.</h1><p class="lede">Mógł wygasnąć, zostać wcześniej użyty lub być nieprawidłowy. Jeśli adres jest już potwierdzony, możesz się zalogować.</p>
+<a class="button primary" href="{% url 'resend_verification' %}">Poproś o nowy link</a>
+{% endif %}
+<p class="card-bottom"><a href="{% url 'account_login' %}">Przejdź do logowania</a></p>
+{% endblock %}

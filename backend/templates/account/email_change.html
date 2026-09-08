@@ -1,0 +1,12 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Zmień adres e-mail{% endblock %}
+{% block content %}
+<span class="eyebrow">USTAWIENIA KONTA</span><h1>Zmień adres e-mail.</h1>
+{% if current_emailaddress %}<p class="lede">Obecny adres: <strong class="break-word">{{ current_emailaddress.email }}</strong>.</p>{% endif %}
+{% if new_emailaddress %}
+<div class="notice">Adres <strong class="break-word">{{ new_emailaddress.email }}</strong> czeka na potwierdzenie. Otwórz link wysłany na nową skrzynkę.</div>
+<form method="post" action="{% url 'account_email' %}" class="account-actions">{% csrf_token %}<input type="hidden" name="email" value="{{ new_emailaddress.email }}"><button type="submit" name="action_send">Wyślij ponownie</button>{% if current_emailaddress %}<button type="submit" name="action_remove">Anuluj zmianę</button>{% endif %}</form>
+{% endif %}
+<form method="post" action="{% url 'account_email' %}">{% csrf_token %}{% include "accounts/fields.html" %}<p class="form-note">Obecny adres pozostaje aktywny do potwierdzenia nowego.</p><button class="button primary" type="submit" name="action_add">Zmień adres e-mail</button></form>
+<p class="card-bottom"><a href="{% url 'account_home' %}">Wróć do konta</a></p>
+{% endblock %}

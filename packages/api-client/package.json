@@ -1,8 +1,8 @@
 {
   "name": "@ookular/api-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "exports": "./src/index.ts",
-  "description": "Shared web/mobile API contract; only foundation endpoints are implemented."
+  "description": "Browser session client and native account flows for OOKULAR."
 }
