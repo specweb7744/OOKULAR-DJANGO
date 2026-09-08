@@ -1,0 +1,3 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Odśwież formularz{% endblock %}
+{% block content %}<h1>Odśwież formularz.</h1><p class="lede">Nie udało się potwierdzić tego żądania. Otwórz formularz ponownie i spróbuj jeszcze raz.</p><a class="button primary" href="{% url 'account_login' %}">Przejdź do logowania</a>{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Potwierdź swój adres{% endblock %}
+{% block content %}
+<h1>Potwierdź swój adres.</h1><p class="lede">Aby otworzyć konto, najpierw potwierdź adres e-mail w otrzymanej wiadomości.</p>
+<a class="button primary" href="{% url 'resend_verification' %}">Wyślij link potwierdzający</a>
+<p class="card-bottom"><a href="{% url 'account_logout' %}">Wyloguj się</a></p>
+{% endblock %}

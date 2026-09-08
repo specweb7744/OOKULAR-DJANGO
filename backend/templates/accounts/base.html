@@ -1,0 +1,42 @@
+{% load static %}
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{% block head_title %}Twoje konto{% endblock %} · OOKULAR</title>
+  <link rel="stylesheet" href="{% static 'accounts/auth.css' %}">
+  <script src="{% static 'accounts/auth.js' %}" defer></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="{% url 'home' %}" aria-label="OOKULAR — strona konta">OOKULAR<span class="brand-dot" aria-hidden="true"></span></a>
+    <span class="header-note">Ludzie. Praca. Możliwości.</span>
+    <nav aria-label="Nawigacja konta">
+      {% if user.is_authenticated %}<a href="{% url 'account_home' %}">Moje konto</a>{% else %}<a href="{% url 'account_login' %}">Logowanie</a>{% endif %}
+    </nav>
+  </header>
+  <main class="auth-shell" id="main">
+    <aside class="intro-panel" aria-label="Konto OOKULAR">
+      <span class="eyebrow">TWÓJ PIERWSZY KROK</span>
+      <h2>W dobrym miejscu.<br>Z dobrymi ludźmi.</h2>
+      <p>Zacznij od własnego konta.<br>Jako pracownik lub pracodawca.</p>
+      <ol class="journey">
+        <li><span class="step-number">01</span><span><strong>Wybierz swoją rolę</strong><small>Pracownik lub pracodawca</small></span></li>
+        <li><span class="step-number">02</span><span><strong>Potwierdź adres e-mail</strong><small>Otwórz link ze swojej skrzynki</small></span></li>
+        <li><span class="step-number">03</span><span><strong>Zaloguj się do OOKULAR</strong><small>Twoje konto jest gotowe</small></span></li>
+      </ol>
+      <div class="intro-footer"><span class="status-dot" aria-hidden="true"></span> Jedno konto. Twoja przestrzeń.</div>
+    </aside>
+    <section class="auth-card" aria-label="Obsługa konta">
+      {% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<p class="notice {{ message.tags }}">{{ message }}</p>{% endfor %}</div>{% endif %}
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+  <footer class="site-footer"><span>OOKULAR</span><span>Twoje konto, na Twoich zasadach.</span></footer>
+  {% block extra_body %}{% endblock %}
+</body>
+</html>

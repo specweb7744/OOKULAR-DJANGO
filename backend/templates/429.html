@@ -1,0 +1,3 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Spróbuj za chwilę{% endblock %}
+{% block content %}<h1>Chwila przerwy.</h1><p class="lede">Zbyt wiele prób w krótkim czasie. Odczekaj kilka minut i spróbuj ponownie.</p><a class="button secondary" href="{% url 'account_login' %}">Wróć do logowania</a>{% endblock %}

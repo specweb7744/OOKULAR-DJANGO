@@ -1,0 +1,9 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Nowy link potwierdzający{% endblock %}
+{% block content %}
+<span class="eyebrow">POTWIERDZENIE ADRESU</span><h1>Wyślemy nowy link.</h1>
+<p class="lede">Podaj adres użyty przy rejestracji. Jeśli konto oczekuje na potwierdzenie, wyślemy wiadomość.</p>
+<form method="post">{% csrf_token %}{% include "accounts/fields.html" %}<button class="button primary" type="submit">Wyślij link ponownie</button></form>
+<p class="fine-print">Odczekaj przynajmniej minutę między wysyłkami.</p>
+<p class="card-bottom"><a href="{% url 'account_login' %}">Wróć do logowania</a></p>
+{% endblock %}

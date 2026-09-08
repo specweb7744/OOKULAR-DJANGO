@@ -1,0 +1,12 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Załóż konto{% endblock %}
+{% block content %}
+<span class="eyebrow">DOŁĄCZ DO OOKULAR</span><h1>Zaczynamy od Ciebie.</h1>
+<p class="lede">Wybierz rolę i utwórz własne konto.</p>
+<form method="post" action="{% url 'account_signup' %}" class="auth-form">
+  {% csrf_token %}{{ redirect_field }}{% include "accounts/fields.html" %}
+  <p class="form-note">Na ten adres wyślemy link potwierdzający. Nie podawaj hasła używanego w innym serwisie.</p>
+  <button class="button primary" type="submit">Utwórz konto <span aria-hidden="true">→</span></button>
+</form>
+<p class="card-bottom">Masz już konto? <a href="{% url 'account_login' %}">Zaloguj się</a></p>
+{% endblock %}

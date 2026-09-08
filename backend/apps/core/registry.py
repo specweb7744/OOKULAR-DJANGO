@@ -12,12 +12,11 @@ MODULES = [
     {
         "id": "accounts",
         "title": "Konta i role",
-        "status": "foundation",
+        "status": "implemented",
         "phase": 1,
         "dependencies": ["core"],
-        "responsibility": "Tożsamość konta i role pracownik/pracodawca. Rejestracja, "
-        "weryfikacja e-mail, odzyskiwanie dostępu i sesje mobilne są "
-        "następnym etapem.",
+        "responsibility": "Rejestracja pracownika i pracodawcy, potwierdzanie e-mail, "
+        "logowanie, reset hasła oraz sesje web i mobilne.",
     },
     {
         "id": "taxonomy",

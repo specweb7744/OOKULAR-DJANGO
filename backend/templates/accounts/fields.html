@@ -1,0 +1,20 @@
+{% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+{% for field in form %}
+  {% if field.is_hidden %}{{ field }}
+  {% elif field.name == "role" %}
+    <fieldset class="role-picker">
+      <legend>{{ field.label }}</legend>
+      <div class="role-options">{% for option in field %}<label class="role-option">{{ option.tag }}<span><strong>{{ option.choice_label }}</strong><small>{% if option.data.value == "employee" %}Moja droga zawodowa{% else %}Moja rola w rekrutacji{% endif %}</small></span></label>{% endfor %}</div>
+      {% if field.errors %}<div class="field-errors" role="alert">{{ field.errors }}</div>{% endif %}
+    </fieldset>
+  {% elif field.name == "remember" %}
+    <div class="remember"><label>{{ field }}<span>Zapamiętaj mnie na tym urządzeniu</span></label></div>
+  {% else %}
+    <div class="form-field{% if field.errors %} has-error{% endif %}">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      <div class="input-wrap">{{ field }}</div>
+      {% if field.help_text %}<div class="help-text" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</div>{% endif %}
+      {% if field.errors %}<div class="field-errors" id="{{ field.auto_id }}_error" role="alert">{{ field.errors }}</div>{% endif %}
+    </div>
+  {% endif %}
+{% endfor %}

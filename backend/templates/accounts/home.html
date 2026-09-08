@@ -1,0 +1,8 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Moje konto{% endblock %}
+{% block content %}
+<span class="eyebrow">MOJE OOKULAR</span><h1>Jesteś u siebie.</h1><p class="lede">Logowanie zakończone. Twoje konto jest aktywne.</p>
+<dl class="account-details"><div><dt>Adres e-mail</dt><dd class="break-word">{{ user.email }}</dd></div><div><dt>Twoja rola</dt><dd>{% for role in roles %}<span class="role-badge">{{ role.get_role_display }}</span>{% empty %}Konto bez przypisanej roli{% endfor %}</dd></div><div><dt>Weryfikacja e-mail</dt><dd><span class="verified-dot" aria-hidden="true"></span> Adres potwierdzony</dd></div></dl>
+<div class="account-actions"><a class="button secondary" href="{% url 'account_change_password' %}">Zmień hasło</a><a class="button secondary" href="{% url 'account_email' %}">Zmień adres e-mail</a></div>
+<form method="post" action="{% url 'account_logout' %}" class="card-bottom">{% csrf_token %}<button type="submit" class="button primary">Wyloguj się</button></form>
+{% endblock %}

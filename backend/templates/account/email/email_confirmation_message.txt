@@ -1,0 +1,11 @@
+Cześć!
+
+Potwierdź adres e-mail swojego konta OOKULAR:
+{{ activate_url }}
+
+Otwórz link i naciśnij „Potwierdzam adres e-mail”. Link jest ważny przez 24 godziny.
+Po potwierdzeniu możesz zalogować się adresem e-mail i swoim hasłem.
+
+Jeśli nie zakładasz konta ani nie zmieniasz adresu w OOKULAR, zignoruj tę wiadomość.
+
+Zespół OOKULAR

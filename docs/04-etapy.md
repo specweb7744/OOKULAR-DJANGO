@@ -4,8 +4,8 @@ To kolejność zależności; nie deklaracja czasu realizacji.
 
 | Etap | Zakres | Co sprawdzamy przed przejściem dalej |
 |---|---|---|
-| 0 — bieżący | Projekt Django, ustawienia, własny User, role, pierwsze API i katalog domen | Projekt startuje, migracje są spójne, prywatne endpointy odmawiają dostępu osobom nieuprawnionym. |
-| 1 | Konta web/mobile i zasady dostępu | Rejestracja, weryfikacja e-mail, logowanie, wylogowanie, reset hasła, unieważnianie sesji, ograniczenie prób, numeracja kont; testy obu klientów. |
+| 0 — wykonany | Projekt Django, ustawienia, własny User, role, pierwsze API i katalog domen | Projekt startuje, migracje są spójne, prywatne endpointy odmawiają dostępu osobom nieuprawnionym. |
+| 1 — bieżący | Konta web/mobile i zasady dostępu | Rejestracja, weryfikacja e-mail, logowanie, wylogowanie, reset hasła, unieważnianie sesji, ograniczenie prób, numeracja kont; testy obu klientów. |
 | 2 | Słowniki i kreator profilu | Zapis szkicu, wznawianie na drugim urządzeniu, rozdzielenie doświadczenia i umiejętności, wersja pytań, widoczność każdego zakresu. |
 | 3 | Firma i oferta | Zweryfikowane członkostwo rekrutera, wymagania stanowiska, warunki pracy, zgłoszenie kandydata. |
 | 4 | Publiczna oś czasu i artykuły | Gość widzi tylko opublikowane treści; tworzenie i edycja mają uprawnienia; działa moderacja. |
@@ -21,9 +21,14 @@ moduł. Ekrany web/mobile rosną razem z tymi funkcjami i używają tego samego 
 
 ## Stan bieżącej paczki
 
-Działają podstawy konta i administracji, ale **nie jest to gotowy system logowania portalu**.
-Brakuje między innymi samodzielnej rejestracji, weryfikacji adresu, ograniczenia prób
-logowania, sesji mobilnych i rzeczywistej poczty. `runserver` służy do pracy lokalnej.
+Działają rejestracja obu ról, weryfikacja e-mail, logowanie, wylogowanie, reset i zmiana
+hasła, sesje mobilne oraz ograniczenie prób. Interfejs kont jest responsywny; klient
+TypeScript korzysta z rzeczywistego API. Szczegóły: [blok kont](06-konta.md).
+
+Etap 1 ma zakończony podblok uwierzytelniania. Oddzielnie pozostają reguła numeracji
+publicznych kont i natywne ekrany. Poczta ma konfigurację SMTP; lokalnie trafia do
+konsoli, a w testach do pamięci. Rzeczywistego dostarczania na domenie nie sprawdzono.
+`runserver` służy do pracy lokalnej.
 
 Produkcja ma osobną konfigurację wymagającą PostgreSQL, konkretnej listy hostów i mocnego
 sekretu. To szablon konfiguracji, a nie dowód spełnienia wszystkich wymagań wdrożenia.

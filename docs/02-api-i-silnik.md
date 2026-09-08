@@ -7,17 +7,18 @@
 | GET /health/ | publiczny | Żywotność procesu: status ok. |
 | GET /ready/ | publiczny | Możliwość odczytu bazy: 200 albo 503 bez szczegółów połączenia. |
 | GET /api/v1/ | publiczny | Nazwa usługi, wersja API i etap foundation. |
-| GET /api/v1/me/ | własna aktywna sesja | Własne ID, e-mail i role. |
-| GET /api/v1/modules/ | aktywne konto staff | Katalog domen i ich rzeczywisty stan realizacji. |
+| GET /api/v1/me/ | własna sesja i potwierdzony e-mail | Własne ID, e-mail i role. |
+| GET /api/v1/modules/ | aktywne konto staff z potwierdzonym e-mailem | Katalog domen i ich rzeczywisty stan realizacji. |
 | /admin/ | administracja Django | Zarządzanie kontami i rolami. |
 
 Kontrakt maszynowy: [OpenAPI](../contracts/openapi.json).
 Klient TypeScript: [api-client](../packages/api-client/src/index.ts).
 
-API domyślnie wymaga zalogowania; tylko jawnie oznaczone widoki są publiczne.
-W szkielecie używamy sesji Django i ochrony CSRF. Klient mobilny korzysta już z
-publicznego kontraktu, ale wymiana i unieważnianie jego tokenów są osobnym zadaniem.
-Nie ma jeszcze publicznej rejestracji, logowania pracowników ani endpointów wyszukiwania.
+API domyślnie wymaga aktywnego konta z potwierdzonym e-mailem. Przeglądarka korzysta
+z sesji Django i CSRF. Natywny klient korzysta z `X-Session-Token`; sprawdzane są
+wygaśnięcie sesji, aktywność użytkownika i hash uwierzytelnienia po zmianie hasła.
+Rejestracja i logowanie obu ról działają; wyszukiwanie pozostaje planem.
+Adresy formularzy i przepływy `/api/auth/app/v1/` opisuje [blok kont](06-konta.md).
 
 ## Plan przetwarzania zapytania
 

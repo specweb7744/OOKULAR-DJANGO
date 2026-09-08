@@ -1,4 +1,4 @@
-# OOKULAR — szkielet modułowy v0.1
+# OOKULAR — konta pracownika i pracodawcy v0.2
 
 Pierwszy fundament portalu społecznościowo-zawodowego OOKULAR.
 Jeden backend Django i wspólne API dla strony oraz przyszłej aplikacji mobilnej.
@@ -9,7 +9,10 @@ Jeden backend Django i wspólne API dla strony oraz przyszłej aplikacji mobilne
 
 - Konfiguracja Django 5.2 LTS dla developmentu, testów i przyszłej produkcji.
 - Własny model użytkownika od pierwszej migracji: e-mail, hashowane hasło, role pracownik/pracodawca.
-- Administracja kontami; role biznesowe nie nadają uprawnień administratora.
+- Rejestracja pracownika/pracodawcy, potwierdzanie i zmiana e-maila, logowanie, wylogowanie, reset i zmiana hasła.
+- Polskie formularze dopasowane do komputera i telefonu, bez konieczności JavaScript.
+- Sesje mobilne, limity prób i unieważnianie starych sesji po zmianie hasła.
+- Administracja korzysta ze wspólnego logowania; role biznesowe nie nadają uprawnień administratora.
 - Diagnostyka procesu i bazy; API własnego konta oraz katalog modułów dla administratora.
 - 18 katalogów domen z opisanymi odpowiedzialnościami, zależnościami i stanem realizacji.
 - Kontrakt OpenAPI oraz niewielki klient TypeScript wspólny dla web/mobile.
@@ -17,8 +20,11 @@ Jeden backend Django i wspólne API dla strony oraz przyszłej aplikacji mobilne
 
 **To fundament, nie gotowy portal ani APK.** Moduły profilu, wyszukiwania, Matchera,
 treści, wiadomości, edukacji i płatności mają przygotowane miejsca i dokumentację;
-ich funkcje nie są jeszcze wdrożone. Klienci web/mobile mają opisane ekrany i kontrakt,
-nie zawierają jeszcze gotowego interfejsu. Publiczna rejestracja i pełne logowanie są etapem 1.
+ich funkcje nie są jeszcze wdrożone. Interfejs kont działa w przeglądarce, również mobilnej. Natywny klient ma obsługiwane
+API i klienta TypeScript; ekrany React Native oraz APK/IPA są późniejszym zadaniem.
+[Instrukcja bloku kont](docs/06-konta.md) opisuje bieżący zakres i testy.
+[Podgląd i poczta](docs/07-podglad-i-poczta.md) opisuje poprawki formularzy oraz
+przygotowanie rzeczywistego testu e-mail w home.pl.
 
 ## Uruchomienie na Windows — PowerShell
 
@@ -32,8 +38,10 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe manage.py runserver 127.0.0.1:8000
 ```
 
-Otwórz [lokalne API](http://127.0.0.1:8000/api/v1/).
-Powinno zwrócić nazwę OOKULAR i etap `foundation`.
+Otwórz [logowanie OOKULAR](http://127.0.0.1:8000/konta/login/).
+Wybierz rejestrację pracownika albo mniejsze wejście pracodawcy.
+W trybie lokalnym link potwierdzający pojawi się w konsoli serwera. Otwórz go
+w przeglądarce, potwierdź adres i zaloguj się. Wiadomości nie są wysyłane do Internetu.
 Ten adres działa dopiero po uruchomieniu serwera na własnym komputerze.
 
 Aby używać administracji, w drugim oknie PowerShell uruchom:
@@ -42,7 +50,9 @@ Aby używać administracji, w drugim oknie PowerShell uruchom:
 .\.venv\Scripts\python.exe manage.py createsuperuser
 ```
 
-Zaloguj się pod [lokalną administracją](http://127.0.0.1:8000/admin/).
+Otwórz [lokalną administrację](http://127.0.0.1:8000/admin/).
+Logowanie przechodzi przez formularz OOKULAR; przy pierwszej próbie potwierdź e-mail
+administratora linkiem z konsoli, a następnie ponownie otwórz `/admin/`.
 Hasło podajesz interaktywnie. Paczka nie zawiera gotowego konta ani wspólnego hasła.
 
 Na Linux/macOS: `python3.12 -m venv .venv`, a następnie te same polecenia,
@@ -72,9 +82,10 @@ Pliki `.env`, lokalna baza, media i środowisko Pythona są wyłączone z repozy
 .\.venv\Scripts\python.exe manage.py test backend --settings=config.settings.test
 ```
 
-Zestaw testów sprawdza m.in. unikalność e-mail niezależnie od wielkości liter,
-oddzielenie ról od uprawnień administracyjnych, ochronę własnego konta oraz CSRF administracji.
-CI wykonuje ten sam zestaw również z PostgreSQL.
+Testy przechodzą przez rejestrację obu ról, e-mail, logowanie, reset hasła, wygasanie
+linków i sesji, CSRF oraz limity prób. Klient TypeScript jest sprawdzany przez HTTP
+z rzeczywistym serwerem Django (wymaga Node 24; bez Node ten jeden test jest pomijany).
+CI instaluje Node i uruchamia pełny zestaw również z PostgreSQL.
 
 ## Mapa plików
 
@@ -83,15 +94,17 @@ CI wykonuje ten sam zestaw również z PostgreSQL.
 | `backend/config` | Ustawienia, routing, ASGI i WSGI. |
 | `backend/apps` | Domeny OOKULAR; stan każdej opisany w jej README. |
 | `backend/api` | Wspólne API `/api/v1/`. |
-| `clients/web`, `clients/mobile` | Zakresy przyszłych interfejsów. |
+| `backend/templates`, `backend/static` | Działający interfejs kont. |
+| `clients/web`, `clients/mobile` | Opisy klientów i dalsze kroki. |
 | `packages/api-client` | Wspólny klient TypeScript dla aktywnych endpointów. |
 | `contracts` | Opis OpenAPI rzeczywiście dostępnych endpointów. |
 | `docs` | Książka, bloki, silnik, interfejs, etapy i źródła. |
 
 ## Dalsza praca
 
-Następny blok: **pełne konta i bezpieczne logowanie pracownika/pracodawcy**,
-z ustaleniem numeracji kont i sesji mobilnych, następnie słowniki i kreator profilu.
+Bieżący blok kończy się na kontach. Kolejny blok funkcjonalny to słowniki i kreator
+profilu; nie został uruchomiony w tej zmianie. Preferowana numeracja publicznych kont
+wymaga jeszcze ustalonej reguły. Nie wykonano wdrożenia pod domeną produkcyjną.
 Kryteria ukończenia zawiera [plan etapów](docs/04-etapy.md).
 
 [API i silnik](docs/02-api-i-silnik.md) · [Interfejs](docs/03-interfejs.md) ·

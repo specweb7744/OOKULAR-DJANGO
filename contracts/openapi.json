@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "OOKULAR Foundation API",
-    "version": "0.1.0",
-    "description": "Implemented endpoints only. Registration, search, matching, payments and mobile token exchange are planned."
+    "title": "OOKULAR Accounts API",
+    "version": "0.2.0",
+    "description": "Implemented portal endpoints and supported native account flows. HTML account forms live under /konta/. Other allauth management endpoints follow the pinned django-allauth version."
   },
   "servers": [
     {
@@ -14,6 +14,9 @@
   "security": [
     {
       "sessionCookie": []
+    },
+    {
+      "sessionToken": []
     }
   ],
   "paths": {
@@ -108,7 +111,7 @@
             }
           },
           "403": {
-            "description": "Active Django session required"
+            "description": "An active authenticated account with its email verified is required."
           }
         }
       }
@@ -128,7 +131,482 @@
             }
           },
           "403": {
-            "description": "Active staff session required"
+            "description": "Verified active staff account required; business roles cannot access this endpoint."
+          }
+        }
+      }
+    },
+    "/api/auth/app/v1/auth/signup": {
+      "post": {
+        "operationId": "signUp",
+        "description": "Create one account and role atomically. HTTP 401 with pending verify_email is expected until verification and login.",
+        "security": [
+          {},
+          {
+            "sessionToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Auth200"
+          },
+          "400": {
+            "$ref": "#/components/responses/Auth400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Auth401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Auth403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Auth409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Auth410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Auth429"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password",
+                  "role"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 12,
+                    "writeOnly": true
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "employee",
+                      "employer"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/app/v1/auth/login": {
+      "post": {
+        "operationId": "logIn",
+        "description": "Log in with email. HTTP 200 returns meta.session_token; 401 may indicate pending email verification.",
+        "security": [
+          {},
+          {
+            "sessionToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Auth200"
+          },
+          "400": {
+            "$ref": "#/components/responses/Auth400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Auth401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Auth403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Auth409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Auth410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Auth429"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "writeOnly": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/app/v1/auth/session": {
+      "get": {
+        "operationId": "getSession",
+        "description": "Current native session; 401 for anonymous or incomplete authentication.",
+        "security": [
+          {},
+          {
+            "sessionToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Auth200"
+          },
+          "400": {
+            "$ref": "#/components/responses/Auth400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Auth401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Auth403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Auth409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Auth410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Auth429"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "logOut",
+        "description": "Invalidate this session. HTTP 401 is the successful logged-out state; clear the stored token.",
+        "security": [
+          {},
+          {
+            "sessionToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Auth200"
+          },
+          "400": {
+            "$ref": "#/components/responses/Auth400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Auth401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Auth403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Auth409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Auth410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Auth429"
+          }
+        }
+      }
+    },
+    "/api/auth/app/v1/auth/email/verify": {
+      "post": {
+        "operationId": "verifyEmail",
+        "description": "Confirm the key from an email link. No automatic login; sign in afterwards. GET is read-only.",
+        "security": [
+          {},
+          {
+            "sessionToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Auth200"
+          },
+          "400": {
+            "$ref": "#/components/responses/Auth400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Auth401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Auth403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Auth409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Auth410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Auth429"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "key"
+                ],
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/app/v1/auth/email/verify/resend": {
+      "post": {
+        "operationId": "resendVerification",
+        "description": "Generic HTTP 200. Sends only for an active account awaiting verification, subject to cooldown.",
+        "security": [
+          {},
+          {
+            "sessionToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Auth200"
+          },
+          "400": {
+            "$ref": "#/components/responses/Auth400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Auth401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Auth403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Auth409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Auth410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Auth429"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/app/v1/auth/password/request": {
+      "post": {
+        "operationId": "requestPasswordReset",
+        "description": "Generic HTTP 200 for known and unknown accounts. Mail contains a link valid for one hour.",
+        "security": [
+          {},
+          {
+            "sessionToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Auth200"
+          },
+          "400": {
+            "$ref": "#/components/responses/Auth400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Auth401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Auth403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Auth409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Auth410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Auth429"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/app/v1/auth/password/reset": {
+      "post": {
+        "operationId": "resetPassword",
+        "description": "Use the uid-token segment from the reset URL. Invalidates old sessions; login again afterwards.",
+        "security": [
+          {},
+          {
+            "sessionToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Auth200"
+          },
+          "400": {
+            "$ref": "#/components/responses/Auth400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Auth401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Auth403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Auth409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Auth410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Auth429"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "key",
+                  "password"
+                ],
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 12,
+                    "writeOnly": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/app/v1/account/password/change": {
+      "post": {
+        "operationId": "changePassword",
+        "description": "Authenticated password change. Requires current password and invalidates old sessions.",
+        "security": [
+          {},
+          {
+            "sessionToken": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Auth200"
+          },
+          "400": {
+            "$ref": "#/components/responses/Auth400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Auth401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Auth403"
+          },
+          "409": {
+            "$ref": "#/components/responses/Auth409"
+          },
+          "410": {
+            "$ref": "#/components/responses/Auth410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Auth429"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "current_password",
+                  "new_password"
+                ],
+                "properties": {
+                  "current_password": {
+                    "type": "string",
+                    "writeOnly": true
+                  },
+                  "new_password": {
+                    "type": "string",
+                    "minLength": 12,
+                    "writeOnly": true
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -140,7 +618,13 @@
         "type": "apiKey",
         "in": "cookie",
         "name": "sessionid",
-        "description": "Django web session. No mobile token flow implemented."
+        "description": "Same-origin Django browser session. Unsafe HTML requests require a CSRF token."
+      },
+      "sessionToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Session-Token",
+        "description": "Native app session token. Persist in OS secure storage. A pending signup token does not grant account access."
       }
     },
     "schemas": {
@@ -239,7 +723,8 @@
             "type": "string",
             "enum": [
               "foundation",
-              "planned"
+              "planned",
+              "implemented"
             ]
           },
           "phase": {
@@ -279,6 +764,126 @@
           }
         },
         "additionalProperties": false
+      },
+      "AuthEnvelope": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "integer"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "is_authenticated": {
+                "type": "boolean"
+              },
+              "session_token": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "param": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "Auth200": {
+        "description": "Completed operation or authenticated session",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AuthEnvelope"
+            }
+          }
+        }
+      },
+      "Auth400": {
+        "description": "Validation errors",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AuthEnvelope"
+            }
+          }
+        }
+      },
+      "Auth401": {
+        "description": "Unauthenticated or incomplete flow; inspect meta and data.flows",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AuthEnvelope"
+            }
+          }
+        }
+      },
+      "Auth403": {
+        "description": "Operation forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AuthEnvelope"
+            }
+          }
+        }
+      },
+      "Auth409": {
+        "description": "Flow conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AuthEnvelope"
+            }
+          }
+        }
+      },
+      "Auth410": {
+        "description": "Session no longer exists; discard token",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AuthEnvelope"
+            }
+          }
+        }
+      },
+      "Auth429": {
+        "description": "Too many attempts",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AuthEnvelope"
+            }
+          }
+        }
       }
     }
   }

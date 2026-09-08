@@ -1,0 +1,9 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Sprawdź skrzynkę{% endblock %}
+{% block content %}
+<span class="eyebrow">JESZCZE JEDEN KROK</span><h1>Sprawdź swoją skrzynkę.</h1>
+<p class="lede">Jeśli adres wymaga potwierdzenia, otrzymasz wiadomość z linkiem. Otwórz go i potwierdź adres, a następnie zaloguj się.</p>
+<div class="notice">Link jest ważny przez 24 godziny. Sprawdź także folder spam.</div>
+<a class="button primary" href="{% url 'account_login' %}">Przejdź do logowania</a>
+<p class="card-bottom">Wiadomość nie dotarła? <a href="{% url 'resend_verification' %}">Wyślij link ponownie</a></p>
+{% endblock %}

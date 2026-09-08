@@ -1,0 +1,14 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Zaloguj się{% endblock %}
+{% block content %}
+<span class="eyebrow">DOBRZE CIĘ WIDZIEĆ</span>
+<h1>Zaloguj się.</h1>
+<p class="lede">Wróć do swojego konta OOKULAR.</p>
+<form method="post" action="{% url 'account_login' %}" class="auth-form">
+  {% csrf_token %}{{ redirect_field }}{% include "accounts/fields.html" %}
+  <a class="forgot-link" href="{% url 'account_reset_password' %}">Nie pamiętasz hasła?</a>
+  <button class="button primary" type="submit">Zaloguj się <span aria-hidden="true">→</span></button>
+</form>
+<div class="card-bottom"><p>Jesteś tu po raz pierwszy?</p><a class="button secondary" href="{% url 'account_signup' %}">Załóż konto pracownika</a><a class="employer-link" href="{% url 'account_signup' %}?role=employer">Rekrutujesz? Załóż konto pracodawcy <span aria-hidden="true">↗</span></a></div>
+<p class="fine-print">Pracownik i pracodawca logują się adresem e-mail.</p>
+{% endblock %}

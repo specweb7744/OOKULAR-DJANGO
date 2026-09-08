@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from allauth.account.models import EmailAddress
 from django.db import DatabaseError
 from django.test import Client, TestCase
 from rest_framework.test import APIClient
@@ -32,6 +33,7 @@ class ApiBoundaryTests(TestCase):
 
     def test_me_ignores_other_account_id_and_omits_staff_fields(self):
         own = User.objects.create_user("own@example.test")
+        EmailAddress.objects.create(user=own, email=own.email, verified=True, primary=True)
         other = User.objects.create_user("other@example.test")
         UserRole.objects.create(user=own, role="employee")
         self.client.force_authenticate(user=own)
@@ -48,6 +50,7 @@ class ApiBoundaryTests(TestCase):
 
     def test_staff_can_read_module_status_without_business_endpoints(self):
         staff = User.objects.create_user("staff@example.test", is_staff=True)
+        EmailAddress.objects.create(user=staff, email=staff.email, verified=True, primary=True)
         self.client.force_authenticate(user=staff)
         response = self.client.get("/api/v1/modules/")
         self.assertEqual(response.status_code, 200)
