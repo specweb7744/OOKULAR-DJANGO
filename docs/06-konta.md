@@ -22,6 +22,9 @@ do pokazania hasła i ustawienia fokusu na błędnym polu. Natywne ekrany React 
 oraz paczki APK/IPA nie należą do tej zmiany. Klient TypeScript rzeczywiście
 łączy się z API; nie jest makietą uwierzytelnienia.
 
+[Podgląd kont i test poczty](07-podglad-i-poczta.md) opisuje poprawki czytelności,
+ograniczenia podglądu oraz kolejny krok dla istniejącego hostingu w home.pl.
+
 ## Uruchomienie i ręczne przejście
 
 Po standardowym uruchomieniu z głównego README otwórz:

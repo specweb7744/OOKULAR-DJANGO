@@ -23,6 +23,8 @@ treści, wiadomości, edukacji i płatności mają przygotowane miejsca i dokume
 ich funkcje nie są jeszcze wdrożone. Interfejs kont działa w przeglądarce, również mobilnej. Natywny klient ma obsługiwane
 API i klienta TypeScript; ekrany React Native oraz APK/IPA są późniejszym zadaniem.
 [Instrukcja bloku kont](docs/06-konta.md) opisuje bieżący zakres i testy.
+[Podgląd i poczta](docs/07-podglad-i-poczta.md) opisuje poprawki formularzy oraz
+przygotowanie rzeczywistego testu e-mail w home.pl.
 
 ## Uruchomienie na Windows — PowerShell
 
