@@ -1,0 +1,285 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "OOKULAR Foundation API",
+    "version": "0.1.0",
+    "description": "Implemented endpoints only. Registration, search, matching, payments and mobile token exchange are planned."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8000",
+      "description": "Local development"
+    }
+  ],
+  "security": [
+    {
+      "sessionCookie": []
+    }
+  ],
+  "paths": {
+    "/health/": {
+      "get": {
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "Process is alive",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/ready/": {
+      "get": {
+        "operationId": "getReadiness",
+        "responses": {
+          "200": {
+            "description": "Database responds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Database unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "unavailable"
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/": {
+      "get": {
+        "operationId": "getApiStatus",
+        "responses": {
+          "200": {
+            "description": "Service metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiStatus"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/me/": {
+      "get": {
+        "operationId": "getMyAccount",
+        "responses": {
+          "200": {
+            "description": "Caller account only",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Account"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Active Django session required"
+          }
+        }
+      }
+    },
+    "/api/v1/modules/": {
+      "get": {
+        "operationId": "getModuleCatalog",
+        "responses": {
+          "200": {
+            "description": "Internal module map",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModuleCatalog"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Active staff session required"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "sessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sessionid",
+        "description": "Django web session. No mobile token flow implemented."
+      }
+    },
+    "schemas": {
+      "Health": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiStatus": {
+        "type": "object",
+        "required": [
+          "service",
+          "api_version",
+          "stage"
+        ],
+        "properties": {
+          "service": {
+            "type": "string",
+            "enum": [
+              "OOKULAR"
+            ]
+          },
+          "api_version": {
+            "type": "string",
+            "enum": [
+              "v1"
+            ]
+          },
+          "stage": {
+            "type": "string",
+            "enum": [
+              "foundation"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "Account": {
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "roles"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Opaque user identifier"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "employee",
+                "employer"
+              ]
+            },
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Module": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "status",
+          "phase",
+          "dependencies",
+          "responsibility"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "foundation",
+              "planned"
+            ]
+          },
+          "phase": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "responsibility": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModuleCatalog": {
+        "type": "object",
+        "required": [
+          "stage",
+          "modules"
+        ],
+        "properties": {
+          "stage": {
+            "type": "string",
+            "enum": [
+              "foundation"
+            ]
+          },
+          "modules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Module"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
