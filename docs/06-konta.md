@@ -1,7 +1,8 @@
 # Blok 1A — rejestracja i logowanie OOKULAR
 
-Ten podblok kończy się na kontach pracownika i pracodawcy. Profile zawodowe,
-firmy, oferty i dopasowanie pozostają kolejnymi etapami.
+Ten dokument opisuje podblok kont pracownika i pracodawcy. Kolejny wykonany krok
+opisuje [prywatny szkic profilu](08-profil-pracownika.md). Firmy, oferty i dopasowanie
+pozostają kolejnymi etapami.
 
 ## Co działa
 

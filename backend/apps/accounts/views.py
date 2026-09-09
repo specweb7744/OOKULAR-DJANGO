@@ -6,6 +6,9 @@ from django.views.decorators.http import require_http_methods, require_safe
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from apps.profiles.permissions import is_employee
+from apps.profiles.services import get_draft
+
 from .forms import ResendVerificationForm
 from .permissions import has_verified_email
 
@@ -20,10 +23,15 @@ def entrance(request):
 def account_home(request):
     if not has_verified_email(request.user):
         return render(request, "account/verified_email_required.html", status=403)
+    employee = is_employee(request.user)
     return render(
         request,
         "accounts/home.html",
-        {"roles": request.user.roles.order_by("role")},
+        {
+            "roles": request.user.roles.order_by("role"),
+            "is_employee": employee,
+            "employee_profile": get_draft(request.user) if employee else None,
+        },
     )
 
 

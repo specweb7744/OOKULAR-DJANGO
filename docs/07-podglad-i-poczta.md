@@ -21,6 +21,11 @@ testu na fizycznym telefonie: dostępne środowisko podglądu nie obsługuje ser
 
 ## Kolejny krok: środowisko w home.pl
 
+Aktualizacja po diagnostyce: użytkownik potwierdził przez SSH Python 3.9.6, a home.pl
+w przekazanej odpowiedzi wykluczyło uruchomienie tego Django na Hostingu Biznes.
+Docelowe wdrożenie wymaga VPS lub serwera dedykowanego. Nie wykonano zakupu ani
+konfiguracji. Przypisanie domeny do serwera nie zostało potwierdzone.
+
 Zachowujemy home.pl jako dostawcę hostingu, domeny i poczty. Główny adres portalu to
 `https://www.ookular.pl`; `ookular.pl` ma do niego przekierowywać. Ta zmiana nie wdraża
 aplikacji ani nie zmienia DNS.
@@ -73,5 +78,6 @@ Samo ustawienie adresu portalu nie uruchamia aplikacji pod tą domeną.
    z czytelną pomocą, dostępnymi przyciskami i widocznym fokusem klawiatury.
 
 Powyższe kroki nie zostały jeszcze wykonane na rzeczywistych skrzynkach.
-Po tym przejściu następnym blokiem jest podstawowy profil pracownika: dane podstawowe,
-cel zawodowy oraz zapis i wznowienie szkicu. Nie został on dodany w tym kroku.
+Niezależnie od oczekiwania na serwer dodano w kodzie [podstawowy profil pracownika](08-profil-pracownika.md):
+dane podstawowe, cel zawodowy oraz zapis i wznowienie szkicu. Testy realnej poczty
+i uruchomienie internetowe nadal pozostają do wykonania.

@@ -1,0 +1,44 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Twój profil zawodowy{% endblock %}
+{% block intro_panel %}
+<aside class="intro-panel" aria-label="Twój profil zawodowy">
+  <span class="eyebrow">TWÓJ KIERUNEK</span>
+  <h2>Praca zaczyna się<br>od Ciebie.</h2>
+  <p>Zacznij od podstaw. Dopracujesz je w swoim tempie.</p>
+  <ol class="journey">
+    <li><span class="step-number">01</span><span><strong>Przedstaw się</strong><small>Imię lub pseudonim i miejscowość</small></span></li>
+    <li><span class="step-number">02</span><span><strong>Opowiedz o swoim celu</strong><small>Jakiej pracy szukasz?</small></span></li>
+    <li><span class="step-number">03</span><span><strong>Zapisz i wróć</strong><small>Twój szkic poczeka na Ciebie</small></span></li>
+  </ol>
+  <p class="intro-footer">Ten szkic jest prywatny. Pracodawcy go nie widzą.</p>
+</aside>
+{% endblock %}
+{% block content %}
+<span class="eyebrow">PROFIL PRACOWNIKA · PODSTAWY</span>
+<h1>W Twoim tempie.</h1>
+<p class="lede">Nie musisz wypełniać wszystkiego od razu. Zapisz to, co już wiesz.</p>
+<div class="draft-status">
+  <span class="role-badge">Prywatny szkic</span>
+  {% if profile %}<span>Ostatni zapis: <time datetime="{{ profile.updated_at|date:'c' }}">{{ profile.updated_at|date:"d.m.Y, H:i" }}</time></span>{% else %}<span>Jeszcze bez zapisu</span>{% endif %}
+</div>
+<form method="post" action="{% url 'employee_profile' %}" class="profile-form">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+  {{ form.revision }}
+  {% if form.revision.errors %}<div class="form-errors" role="alert">Wczytaj profil ponownie przed zapisem. {{ form.revision.errors }}</div>{% endif %}
+  <fieldset class="profile-section">
+    <legend>O Tobie</legend>
+    {% include "profiles/field.html" with field=form.display_name %}
+    {% include "profiles/field.html" with field=form.location %}
+  </fieldset>
+  <fieldset class="profile-section">
+    <legend>Twój kierunek zawodowy</legend>
+    {% include "profiles/field.html" with field=form.desired_role %}
+    {% include "profiles/field.html" with field=form.career_goal %}
+  </fieldset>
+  <p class="form-note">Wszystkie pola są opcjonalne. Pracodawcy nie widzą szkicu. Zmiany zapisują się po wybraniu przycisku poniżej.</p>
+  <button type="submit" class="button primary">Zapisz szkic</button>
+  {% if conflict %}<a class="button secondary conflict-reload" href="{% url 'employee_profile' %}">Wczytaj zapisaną wersję</a>{% endif %}
+</form>
+<p class="card-bottom"><a href="{% url 'account_home' %}">Wróć do mojego konta</a></p>
+{% endblock %}

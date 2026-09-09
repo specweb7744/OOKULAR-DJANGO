@@ -1,4 +1,4 @@
-# OOKULAR — mapa bloków v0.2
+# OOKULAR — mapa bloków v0.3
 
 **Jeden backend Django, wspólna baza PostgreSQL, dwa interfejsy: web i mobile.**
 To modularny monolit: moduły mają oddzielne odpowiedzialności w jednym projekcie,
@@ -21,12 +21,12 @@ flowchart TD
 Schemat pokazuje współpracę bloków, nie kolejność wszystkich zapytań HTTP.
 Prywatność i uprawnienia kontrolują odczyt przed wyszukiwaniem i dopasowaniem.
 
-| Moduł w Django | Blok | Stan v0.2 | Odpowiedzialność |
+| Moduł w Django | Blok | Stan v0.3 | Odpowiedzialność |
 |---|---|---|---|
 | `core` | Fundament | Fundament | Konfiguracja, diagnostyka działania, wspólne API i katalog modułów. |
 | `accounts` | Konta i role | Wdrożony w kodzie | Rejestracja obu ról, potwierdzanie e-mail, logowanie, reset hasła, sesje web i mobilne. |
 | `taxonomy` | Słowniki i kryteria | Zaplanowany | Wersjonowane słowniki umiejętności, uprawnień i warunków pracy; oddzielenie informacji prywatnych od kryteriów zawodowych. |
-| `profiles` | Kreator profilu pracownika | Zaplanowany | Wieloetapowy kreator, szkic i wznawianie, tagi, suwaki, doświadczenie oddzielone od umiejętności, kontrolowana publikacja profilu. |
+| `profiles` | Kreator profilu pracownika | Częściowo wdrożony | Prywatny szkic podstaw i celu zawodowego; zapis i wznowienie w web/API. Dalsze kroki, tagi, suwaki i publikacja pozostają planem. |
 | `organizations` | Firmy i członkostwa | Zaplanowany | Profil firmy, weryfikacja oraz członkostwa i uprawnienia rekruterów. Rola pracodawcy nie daje automatycznie dostępu do każdej firmy. |
 | `jobs` | Oferty i aplikacje | Zaplanowany | Wymagania stanowiska, warunki zatrudnienia i zgłoszenia kandydatów. |
 | `feed` | Oś czasu i ogłoszenia | Zaplanowany | Publiczna oś czasu, zwykłe wpisy i ogłoszenia. Widoczność, publikacja i moderacja; promowanie uruchamiane przez billing. |

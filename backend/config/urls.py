@@ -3,6 +3,7 @@ from allauth.headless.constants import Client
 from apps.accounts import views as account_views
 from apps.accounts.headless import MobileResendView, MobileSignupView
 from apps.core.views import health, readiness
+from apps.profiles.views import employee_profile
 from django.contrib import admin
 from django.urls import include, path
 
@@ -11,6 +12,7 @@ admin.site.login = secure_admin_login(admin.site.login)
 urlpatterns = [
     path("", account_views.entrance, name="home"),
     path("konto/", account_views.account_home, name="account_home"),
+    path("konto/profil/", employee_profile, name="employee_profile"),
     path(
         "konta/potwierdz-ponownie/", account_views.resend_verification, name="resend_verification"
     ),
