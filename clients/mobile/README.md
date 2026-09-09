@@ -9,6 +9,11 @@ potwierdzenie e-mail, ponowną wysyłkę, reset i zmianę hasła, sesję, własn
 oraz wylogowanie. Wstrzyknij magazyn tokenów z Keychain/Keystore, np. przez adapter
 przyszłego klienta; kod nie zapisuje ich w localStorage ani w jawnym pliku.
 
+`employeeProfile()` pobiera prywatny szkic pracownika, a `saveEmployeeProfile(...)`
+zapisuje częściowe zmiany z obowiązkową rewizją. HTTP 409 wymaga ponownego pobrania
+i uzgodnienia zmian; klient nie ponawia zapisu automatycznie. Web i mobile widzą te same dane.
+[Kontrakt profilu](../../docs/08-profil-pracownika.md).
+
 HTTP 401 po rejestracji oznacza oczekiwanie na potwierdzenie. Zachowaj również token
 sesji oczekującej. Adresy z wiadomości otwierają formularze Django; po potwierdzeniu
 wróć do aplikacji i zaloguj się. Deep linki i ekran natywny są osobnym zadaniem.

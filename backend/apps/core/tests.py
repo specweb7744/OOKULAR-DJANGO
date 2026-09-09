@@ -56,7 +56,7 @@ class ApiBoundaryTests(TestCase):
         self.assertEqual(response.status_code, 200)
         modules = {m["id"]: m for m in response.json()["modules"]}
         self.assertEqual(modules["matching"]["status"], "planned")
-        self.assertEqual(modules["profiles"]["status"], "planned")
+        self.assertEqual(modules["profiles"]["status"], "partial")
         self.assertEqual(self.client.get("/api/v1/search/").status_code, 404)
         self.assertEqual(self.client.get("/api/v1/matches/").status_code, 404)
 

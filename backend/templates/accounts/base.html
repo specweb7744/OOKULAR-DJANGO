@@ -20,6 +20,7 @@
     </nav>
   </header>
   <main class="auth-shell" id="main">
+    {% block intro_panel %}
     <aside class="intro-panel" aria-label="Konto OOKULAR">
       <span class="eyebrow">TWÓJ PIERWSZY KROK</span>
       <h2>W dobrym miejscu.<br>Z dobrymi ludźmi.</h2>
@@ -31,6 +32,7 @@
       </ol>
       <div class="intro-footer"><span class="status-dot" aria-hidden="true"></span> Jedno konto. Twoja przestrzeń.</div>
     </aside>
+    {% endblock %}
     <section class="auth-card" aria-label="Obsługa konta">
       {% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<p class="notice {{ message.tags }}">{{ message }}</p>{% endfor %}</div>{% endif %}
       {% block content %}{% endblock %}

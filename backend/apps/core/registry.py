@@ -30,12 +30,12 @@ MODULES = [
     {
         "id": "profiles",
         "title": "Kreator profilu pracownika",
-        "status": "planned",
+        "status": "partial",
         "phase": 2,
         "dependencies": ["accounts", "taxonomy", "privacy"],
-        "responsibility": "Wieloetapowy kreator, szkic i wznawianie, tagi, suwaki, "
-        "doświadczenie oddzielone od umiejętności, kontrolowana publikacja "
-        "profilu.",
+        "responsibility": "Prywatny szkic podstaw i celu zawodowego; zapis i wznawianie "
+        "przez web/API z ochroną przed nadpisaniem nowszych zmian. Tagi, suwaki, "
+        "doświadczenie, umiejętności i publikacja pozostają kolejnymi krokami.",
     },
     {
         "id": "organizations",

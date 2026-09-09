@@ -8,6 +8,7 @@
 | GET /ready/ | publiczny | Możliwość odczytu bazy: 200 albo 503 bez szczegółów połączenia. |
 | GET /api/v1/ | publiczny | Nazwa usługi, wersja API i etap foundation. |
 | GET /api/v1/me/ | własna sesja i potwierdzony e-mail | Własne ID, e-mail i role. |
+| GET/PATCH /api/v1/me/employee-profile/ | aktywne, zweryfikowane konto z rolą pracownika | Własny prywatny szkic; zapis wymaga aktualnej rewizji. |
 | GET /api/v1/modules/ | aktywne konto staff z potwierdzonym e-mailem | Katalog domen i ich rzeczywisty stan realizacji. |
 | /admin/ | administracja Django | Zarządzanie kontami i rolami. |
 
@@ -59,8 +60,9 @@ z indeksów, pamięci podręcznej i wyników.
 
 ## Wspólne dane web/mobile
 
-Konta, szkice kreatora i historia zmian są przechowywane na serwerze. Oba interfejsy
-pracują na tych samych identyfikatorach. Dla kolejnych funkcji przewidujemy wersjonowane
-błędy walidacji, paginację i kontrolę konfliktów zapisu.
+Konta i aktualny szkic podstaw profilu są przechowywane na serwerze. Web i mobile
+korzystają z tego samego szkicu. Kontrola rewizji odrzuca starszy zapis kodem 409;
+nie stanowi historii wersji do przywrócenia. Historia i kolejne kroki kreatora
+pozostają planem. Szczegóły: [podstawowy profil](08-profil-pracownika.md).
 Klucze OpenAI i innych dostawców pozostają wyłącznie w backendzie.
 [OpenAI: uwierzytelnianie API](https://developers.openai.com/api/reference/overview)

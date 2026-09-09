@@ -1,4 +1,4 @@
-# OOKULAR — konta pracownika i pracodawcy v0.2
+# OOKULAR — konta i podstawowy profil pracownika v0.3
 
 Pierwszy fundament portalu społecznościowo-zawodowego OOKULAR.
 Jeden backend Django i wspólne API dla strony oraz przyszłej aplikacji mobilnej.
@@ -11,6 +11,8 @@ Jeden backend Django i wspólne API dla strony oraz przyszłej aplikacji mobilne
 - Własny model użytkownika od pierwszej migracji: e-mail, hashowane hasło, role pracownik/pracodawca.
 - Rejestracja pracownika/pracodawcy, potwierdzanie i zmiana e-maila, logowanie, wylogowanie, reset i zmiana hasła.
 - Polskie formularze dopasowane do komputera i telefonu, bez konieczności JavaScript.
+- Prywatny szkic profilu pracownika: podstawy, cel zawodowy, zapis i wznowienie w web/API.
+- Ochrona przed nadpisaniem szkicu przez starszą wersję z innej karty lub urządzenia.
 - Sesje mobilne, limity prób i unieważnianie starych sesji po zmianie hasła.
 - Administracja korzysta ze wspólnego logowania; role biznesowe nie nadają uprawnień administratora.
 - Diagnostyka procesu i bazy; API własnego konta oraz katalog modułów dla administratora.
@@ -18,11 +20,13 @@ Jeden backend Django i wspólne API dla strony oraz przyszłej aplikacji mobilne
 - Kontrakt OpenAPI oraz niewielki klient TypeScript wspólny dla web/mobile.
 - Testy granic dostępu, walidacji i migracji; konfiguracja kontroli GitHub Actions dla SQLite i PostgreSQL.
 
-**To fundament, nie gotowy portal ani APK.** Moduły profilu, wyszukiwania, Matchera,
-treści, wiadomości, edukacji i płatności mają przygotowane miejsca i dokumentację;
-ich funkcje nie są jeszcze wdrożone. Interfejs kont działa w przeglądarce, również mobilnej. Natywny klient ma obsługiwane
+**To fundament, nie gotowy portal ani APK.** Profil ma pierwszy, prywatny krok.
+Rozbudowany kreator, publikacja, wyszukiwanie, Matcher, treści, wiadomości, edukacja
+i płatności pozostają kolejnymi etapami. Interfejs kont i profilu działa w przeglądarce,
+również mobilnej. Natywny klient ma obsługiwane
 API i klienta TypeScript; ekrany React Native oraz APK/IPA są późniejszym zadaniem.
 [Instrukcja bloku kont](docs/06-konta.md) opisuje bieżący zakres i testy.
+[Podstawowy profil pracownika](docs/08-profil-pracownika.md) opisuje nowy formularz i API szkicu.
 [Podgląd i poczta](docs/07-podglad-i-poczta.md) opisuje poprawki formularzy oraz
 przygotowanie rzeczywistego testu e-mail w home.pl.
 
@@ -43,6 +47,10 @@ Wybierz rejestrację pracownika albo mniejsze wejście pracodawcy.
 W trybie lokalnym link potwierdzający pojawi się w konsoli serwera. Otwórz go
 w przeglądarce, potwierdź adres i zaloguj się. Wiadomości nie są wysyłane do Internetu.
 Ten adres działa dopiero po uruchomieniu serwera na własnym komputerze.
+
+Po zalogowaniu jako pracownik wybierz „Rozpocznij profil” na stronie konta.
+Formularz `/konto/profil/` pozwala zapisać także niepełny szkic. Przy kolejnym wejściu
+pojawią się zapisane dane; pracodawcy nie mają do nich dostępu.
 
 Aby używać administracji, w drugim oknie PowerShell uruchom:
 
@@ -102,8 +110,8 @@ CI instaluje Node i uruchamia pełny zestaw również z PostgreSQL.
 
 ## Dalsza praca
 
-Bieżący blok kończy się na kontach. Kolejny blok funkcjonalny to słowniki i kreator
-profilu; nie został uruchomiony w tej zmianie. Preferowana numeracja publicznych kont
+Bieżący blok obejmuje konta oraz prywatny szkic podstaw i celu zawodowego pracownika.
+Kolejne kroki profilu to słowniki, doświadczenie i umiejętności. Preferowana numeracja publicznych kont
 wymaga jeszcze ustalonej reguły. Nie wykonano wdrożenia pod domeną produkcyjną.
 Kryteria ukończenia zawiera [plan etapów](docs/04-etapy.md).
 

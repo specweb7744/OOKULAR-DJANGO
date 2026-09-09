@@ -10,11 +10,34 @@ export interface ApiStatus {
   api_version: "v1";
   stage: "foundation";
 }
+export interface EmployeeProfile {
+  display_name: string;
+  location: string;
+  desired_role: string;
+  career_goal: string;
+  revision: number;
+  updated_at: string | null;
+  status: "draft";
+  visibility: "private";
+  schema_version: 1;
+}
+export type EmployeeProfilePatch = Partial<Pick<EmployeeProfile,
+  "display_name" | "location" | "desired_role" | "career_goal"
+>> & { revision: number };
+
 export class ApiError extends Error {
-  constructor(public readonly status: number) {
+  constructor(public readonly status: number, public readonly details?: unknown) {
     super(`OOKULAR API returned HTTP ${status}`);
     this.name = "ApiError";
   }
+}
+
+async function profileResponse(response: Response): Promise<EmployeeProfile> {
+  if (!response.ok) {
+    const details: unknown = await response.json().catch(() => undefined);
+    throw new ApiError(response.status, details);
+  }
+  return response.json() as Promise<EmployeeProfile>;
 }
 
 /**
@@ -40,6 +63,18 @@ export function createOokularClient(origin: string, fetcher: typeof fetch = fetc
   return {
     status: (signal?: AbortSignal) => get<ApiStatus>("/api/v1/", signal),
     me: (signal?: AbortSignal) => get<Account>("/api/v1/me/", signal),
+    employeeProfile: (signal?: AbortSignal) =>
+      get<EmployeeProfile>("/api/v1/me/employee-profile/", signal),
+    saveEmployeeProfile: async (data: EmployeeProfilePatch, csrfToken: string) => {
+      if (!csrfToken) throw new Error("A Django CSRF token is required to save the profile.");
+      return profileResponse(await fetcher(new URL("/api/v1/me/employee-profile/", base), {
+        method: "PATCH", credentials: "include",
+        headers: {
+          Accept: "application/json", "Content-Type": "application/json", "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify(data),
+      }));
+    },
   };
 }
 
@@ -120,5 +155,9 @@ export function createMobileAuthClient(
       if (!response.ok) throw new ApiError(response.status);
       return response.json() as Promise<Account>;
     }),
+    employeeProfile: () => serial(async () =>
+      profileResponse(await send("/api/v1/me/employee-profile/", "GET"))),
+    saveEmployeeProfile: (data: EmployeeProfilePatch) => serial(async () =>
+      profileResponse(await send("/api/v1/me/employee-profile/", "PATCH", data))),
   };
 }

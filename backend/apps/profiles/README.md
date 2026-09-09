@@ -1,10 +1,18 @@
 # Kreator profilu pracownika
 
-Status: **zaplanowany moduł — funkcje jeszcze niewdrożone**.
+Status: **częściowo wdrożony — prywatny szkic podstaw i celu zawodowego**.
 
-Wieloetapowy kreator, szkic i wznawianie, tagi, suwaki, doświadczenie oddzielone od umiejętności, kontrolowana publikacja profilu.
+Formularz `/konto/profil/` i GET/PATCH `/api/v1/me/employee-profile/` obsługują imię
+lub pseudonim, miejscowość, szukane stanowisko i cel zawodowy. Zapis jest częściowy,
+prywatny i chroniony przed nadpisaniem nowszej wersji. Każdy odczyt i zapis wymaga
+aktywnego, zweryfikowanego konta z rolą pracownika; dotyczy wyłącznie właściciela.
 
-Etap: 2. Zależności: `accounts`, `taxonomy`, `privacy`.
+Tagi, suwaki, doświadczenie oddzielone od umiejętności i kontrolowana publikacja
+profilu pozostają kolejnymi krokami. Dane tego szkicu nie trafiają do Matchera.
+
+Implementacja i scenariusze: [podstawowy profil](../../../docs/08-profil-pracownika.md).
+
+Etap: 2A. Obecna zależność: `accounts`. Kolejne kroki wykorzystają `taxonomy` i `privacy`.
 
 Szczegóły granic i kryteria ukończenia: [mapa modułów](../../../docs/01-bloki.md) i [etapy](../../../docs/04-etapy.md).
 

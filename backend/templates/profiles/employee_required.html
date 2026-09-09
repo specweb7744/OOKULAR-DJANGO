@@ -1,0 +1,8 @@
+{% extends "accounts/base.html" %}
+{% block head_title %}Profil pracownika{% endblock %}
+{% block content %}
+<span class="eyebrow">TWOJE KONTO OOKULAR</span>
+<h1>Profil pracownika.</h1>
+<p class="lede">Ten formularz jest dostępny dla konta z rolą pracownika.</p>
+<a class="button secondary" href="{% url 'account_home' %}">Wróć do mojego konta</a>
+{% endblock %}

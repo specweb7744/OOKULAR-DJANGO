@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "OOKULAR Accounts API",
-    "version": "0.2.0",
-    "description": "Implemented portal endpoints and supported native account flows. HTML account forms live under /konta/. Other allauth management endpoints follow the pinned django-allauth version."
+    "title": "OOKULAR Accounts and Profile API",
+    "version": "0.3.0",
+    "description": "Implemented portal endpoints and supported native account flows. HTML account forms live under /konta/. Other allauth management endpoints follow the pinned django-allauth version. Private employee drafts are available under /api/v1/me/employee-profile/."
   },
   "servers": [
     {
@@ -610,6 +610,79 @@
           }
         }
       }
+    },
+    "/api/v1/me/employee-profile/": {
+      "get": {
+        "operationId": "getMyEmployeeProfile",
+        "description": "Owner-only private draft. Missing draft returns empty fields, revision 0 and updated_at null; GET never creates a row.",
+        "responses": {
+          "200": {
+            "description": "Own draft",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeProfile"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Requires an active account with its current email verified and the employee role. Cookie writes also require CSRF. No staff bypass."
+          }
+        }
+      },
+      "patch": {
+        "operationId": "saveMyEmployeeProfile",
+        "description": "Create or update own draft. All four text fields are optional; omitted fields keep their saved values, empty strings clear them. Revision is required, including the first save. Writes on stale revisions return 409; clients must fetch the latest draft and resolve changes before retrying. Nothing is published. JSON only.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeProfilePatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved private draft, including new revision",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or unknown fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileValidationErrors"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Requires an active account with its current email verified and the employee role. Cookie writes also require CSRF. No staff bypass."
+          },
+          "409": {
+            "description": "Newer draft exists; no submitted data was written",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileConflict"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Only application/json is accepted."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -724,7 +797,8 @@
             "enum": [
               "foundation",
               "planned",
-              "implemented"
+              "implemented",
+              "partial"
             ]
           },
           "phase": {
@@ -810,6 +884,130 @@
                 }
               }
             }
+          }
+        }
+      },
+      "EmployeeProfile": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "location": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "desired_role": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "career_goal": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "0 means no draft has been saved yet."
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft"
+            ]
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "private"
+            ]
+          },
+          "schema_version": {
+            "type": "integer",
+            "enum": [
+              1
+            ]
+          }
+        },
+        "required": [
+          "display_name",
+          "location",
+          "desired_role",
+          "career_goal",
+          "revision",
+          "updated_at",
+          "status",
+          "visibility",
+          "schema_version"
+        ]
+      },
+      "EmployeeProfilePatch": {
+        "type": "object",
+        "required": [
+          "revision"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "location": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "desired_role": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "career_goal": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Revision returned by the last GET/PATCH. Use 0 only to create a draft."
+          }
+        }
+      },
+      "ProfileConflict": {
+        "type": "object",
+        "required": [
+          "code",
+          "detail",
+          "current_revision"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "draft_conflict"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          },
+          "current_revision": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "ProfileValidationErrors": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
         }
       }
